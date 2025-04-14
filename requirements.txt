@@ -1,3 +1,5 @@
 sqlacodegen
 sqlacodegen[pgvector]
 sqlacodegen[geoalchemy2]
+psycopg[binary]
+dotenv
