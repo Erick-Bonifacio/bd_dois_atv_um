@@ -42,18 +42,8 @@ class OrderDAO:
             order_info = {
                 "Número do pedido": order.orderid,
                 "Data do pedido": order.orderdate.strftime("%Y-%m-%d") if order.orderdate else "N/A",
-                "Data requerida": order.requireddate.strftime("%Y-%m-%d") if order.requireddate else "N/A",
-                "Data de envio": order.shippeddate.strftime("%Y-%m-%d") if order.shippeddate else "N/A",
-                "Frete": float(order.freight) if order.freight else "N/A",
                 "Nome do cliente": order.customers.companyname,
                 "Nome do vendedor": f"{order.employees.firstname} {order.employees.lastname}",
-                "Nome do destinatário": order.shipname,
-                "Endereço do destinatário": order.shipaddress,
-                "Cidade do destinatário": order.shipcity,
-                "Região do destinatário": order.shipregion,
-                "CEP do destinatário": order.shippostalcode,
-                "País do destinatário": order.shipcountry,
-                "ID do transportador": order.shipperid,
                 "Itens do pedido": [{"Produto": detail.products.productname, "Quantidade": detail.quantity, "Preço": float(detail.unitprice)} for detail in order.orderDetails]
             }
             return order_info
