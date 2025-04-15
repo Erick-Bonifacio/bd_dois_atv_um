@@ -19,7 +19,7 @@ class Controller:
                 print("Saindo...")
                 break
             else:
-                self.view.display_message("Opção inválida, tente novamente.")
+                self.view.display_message("❌ Opção inválida, tente novamente.")
 
             input("Pressione Enter para continuar")
             self.view.clear_screen()
@@ -28,7 +28,7 @@ class Controller:
         order_data = self.view.get_order_data()
         order_details = self.view.get_order_details()
         self.dao.create_order(order_data, order_details)
-        self.view.display_message("Order inserido com sucesso!")
+        self.view.display_message("✅ Pedido inserido com sucesso!")
 
     def infos_order(self):
         order_id = self.view.get_order_id()  
@@ -36,13 +36,17 @@ class Controller:
         if order_info:
             self.view.display_order_info(order_info)
         else:
-            self.view.display_message("Order não encontrada.")
+            self.view.display_message("❗ Nenhum pedido encontrato com esse ID!")
 
     def ranking_funcionarios(self):
         start_date = input("Data inicial (YYYY-MM-DD): ")
         end_date = input("Data final (YYYY-MM-DD): ")
         ranking = self.dao.employee_ranking(start_date, end_date)
-        self.view.display_employee_ranking(ranking)
+
+        if ranking:
+            self.view.display_employee_ranking(ranking)
+        else:
+            self.view.display_message("❌ Não foi possível gerar o ranking")
 
 if __name__ == '__main__':
     controller = Controller()

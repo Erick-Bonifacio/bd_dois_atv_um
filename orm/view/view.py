@@ -3,28 +3,33 @@ import os
 class View:
     
     def show_menu(self):
-        print("1. Inserir novo pedido")
-        print("2. Relatório de pedido")
-        print("3. Exibir ranking dos funcionários")
-        print("4. Sair")
-        opcao = input("Escolha uma opção: ")
+        print('\n' + '=' * 40)
+        print('        [ORM] SISTEMA DE PEDIDOS NORTHWIND')
+        print('=' * 40)
+        print('1️⃣  Inserir novo pedido')
+        print('2️⃣  Consultar informações de um pedido')
+        print('3️⃣  Ver ranking de funcionários')
+        print('4️⃣  Sair do sistema')
+
+        print('=' * 40)
+        opcao = input('🔸 Escolha uma opção: ')
         return opcao
 
     def get_order_data(self):
         order_id = self.ask_for_order_id()
-        customer_id = input("ID do Cliente: ")
-        employee_id = input("ID do Empregado: ")
-        order_date = input("Data do Pedido (YYYY-MM-DD): ")
-        required_date = input("Data Requerida (YYYY-MM-DD): ")
-        shipped_date = input("Data de Envio (YYYY-MM-DD): ")
-        freight = input("Frete: ")
-        ship_name = input("Nome do Destinatário: ")
-        ship_address = input("Endereço do Destinatário: ")
-        ship_city = input("Cidade do Destinatário: ")
-        ship_region = input("Região do Destinatário: ")
-        ship_postal_code = input("CEP do Destinatário: ")
-        ship_country = input("País do Destinatário: ")
-        shipper_id = input("ID do Transportador: ")
+        customer_id = input("ID do cliente: ")
+        employee_id = input("ID do funcionário: ")
+        order_date = input("Data do pedido (YYYY-MM-DD): ")
+        required_date = input("Data necessária (YYYY-MM-DD): ")
+        shipped_date = input("Data de envio (YYYY-MM-DD): ")
+        freight = input("Valor do frete: ")
+        ship_name = input("Nome do destinatário: ")
+        ship_address = input("Endereço do destinatário: ")
+        ship_city = input("Cidade do destinatário: ")
+        ship_region = input("Região do destinatário: ")
+        ship_postal_code = input("CEP do destinatário: ")
+        ship_country = input("País do destinatário: ")
+        shipper_id = input("ID da transportadora: ")
 
         return {
             "orderid": order_id,
@@ -45,7 +50,8 @@ class View:
 
     def get_order_details(self):
         details = []
-        print("\nDigite os itens do pedido (deixe em branco para finalizar e pressione Enter):")
+        
+        print("\nDigite os detalhes dos itens do pedido (pressione enter para finalizar):")
         while True:
             product_id = input("ID do Produto: ")
             if not product_id:
