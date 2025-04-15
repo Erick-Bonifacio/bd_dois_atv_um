@@ -80,7 +80,7 @@ class View:
     def display_employee_ranking(self, ranking):
         print("\n***** Ranking dos Funcionários *****\n")
         for employee in ranking:
-            print(f"{employee[0]} {employee[1]} - Pedidos: {employee[2]}, Vendas: R$ {employee[3]:.2f}")
+            print(f"Nome do funcionário: {employee[0]} {employee[1]} - Total de pedidos realizados: {employee[2]}, Soma dos valores vendidos: R$ {employee[3]:.2f}")
 
     def display_message(self, message):
         print(message)
