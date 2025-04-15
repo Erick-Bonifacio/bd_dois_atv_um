@@ -29,9 +29,9 @@ class PedidoDAO:
             JOIN customers cli ON p.customerid = cli.customerid
             JOIN employees emp ON p.employeeid = emp.employeeid
             LEFT JOIN order_details det ON p.orderid = det.orderid
-            WHERE p.orderid = %s;
-        """
-        return self.__executar_sql(consulta, (codigo_pedido,), fetch=True)
+            WHERE p.orderid = """ + str(codigo_pedido) + ";"
+        return self.__executar_sql(consulta, fetch=True)
+
 
     def inserir_pedido(self, dados):
         conn = self.db.connect()
