@@ -1,130 +1,170 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, Numeric, SmallInteger, String, Text
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
+from typing import List, Optional
 
-Base = declarative_base()
-metadata = Base.metadata
+from sqlalchemy import DateTime, ForeignKeyConstraint, Integer, Numeric, PrimaryKeyConstraint, SmallInteger, String, Text
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+import datetime
+import decimal
 
-class Category(Base):
+class Base(DeclarativeBase):
+    pass
+
+
+class Categories(Base):
     __tablename__ = 'categories'
-    __table_args__ = {'schema': 'northwind'}
+    __table_args__ = (
+        PrimaryKeyConstraint('categoryid', name='categories_pkey'),
+        {'schema': 'northwind'}
+    )
 
-    categoryid = Column(Integer, primary_key=True)
-    categoryname = Column(String(50))
-    description = Column(String(100))
+    categoryid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    categoryname: Mapped[Optional[str]] = mapped_column(String(50))
+    description: Mapped[Optional[str]] = mapped_column(String(100))
 
-class Customer(Base):
+
+class Customers(Base):
     __tablename__ = 'customers'
-    __table_args__ = {'schema': 'northwind'}
+    __table_args__ = (
+        PrimaryKeyConstraint('customerid', name='customers_pkey'),
+        {'schema': 'northwind'}
+    )
 
-    customerid = Column(String(5), primary_key=True)
-    companyname = Column(String(50))
-    contactname = Column(String(30))
-    contacttitle = Column(String(30))
-    address = Column(String(50))
-    city = Column(String(20))
-    region = Column(String(15))
-    postalcode = Column(String(9))
-    country = Column(String(15))
-    phone = Column(String(17))
-    fax = Column(String(17))
+    customerid: Mapped[str] = mapped_column(String(5), primary_key=True)
+    companyname: Mapped[Optional[str]] = mapped_column(String(50))
+    contactname: Mapped[Optional[str]] = mapped_column(String(30))
+    contacttitle: Mapped[Optional[str]] = mapped_column(String(30))
+    address: Mapped[Optional[str]] = mapped_column(String(50))
+    city: Mapped[Optional[str]] = mapped_column(String(20))
+    region: Mapped[Optional[str]] = mapped_column(String(15))
+    postalcode: Mapped[Optional[str]] = mapped_column(String(9))
+    country: Mapped[Optional[str]] = mapped_column(String(15))
+    phone: Mapped[Optional[str]] = mapped_column(String(17))
+    fax: Mapped[Optional[str]] = mapped_column(String(17))
 
-class Employee(Base):
+
+class Employees(Base):
     __tablename__ = 'employees'
-    __table_args__ = {'schema': 'northwind'}
+    __table_args__ = (
+        PrimaryKeyConstraint('employeeid', name='employees_pkey'),
+        {'schema': 'northwind'}
+    )
 
-    employeeid = Column(Integer, primary_key=True)
-    lastname = Column(String(10))
-    firstname = Column(String(10))
-    title = Column(String(25))
-    titleofcourtesy = Column(String(5))
-    birthdate = Column(DateTime)
-    hiredate = Column(DateTime)
-    address = Column(String(50))
-    city = Column(String(20))
-    region = Column(String(2))
-    postalcode = Column(String(9))
-    country = Column(String(15))
-    homephone = Column(String(14))
-    extension = Column(String(4))
-    reportsto = Column(Integer)
-    notes = Column(Text)
-    
-    orders = relationship("Order", back_populates="employee")
+    employeeid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    lastname: Mapped[Optional[str]] = mapped_column(String(10))
+    firstname: Mapped[Optional[str]] = mapped_column(String(10))
+    title: Mapped[Optional[str]] = mapped_column(String(25))
+    titleofcourtesy: Mapped[Optional[str]] = mapped_column(String(5))
+    birthdate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    hiredate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    address: Mapped[Optional[str]] = mapped_column(String(50))
+    city: Mapped[Optional[str]] = mapped_column(String(20))
+    region: Mapped[Optional[str]] = mapped_column(String(2))
+    postalcode: Mapped[Optional[str]] = mapped_column(String(9))
+    country: Mapped[Optional[str]] = mapped_column(String(15))
+    homephone: Mapped[Optional[str]] = mapped_column(String(14))
+    extension: Mapped[Optional[str]] = mapped_column(String(4))
+    reportsto: Mapped[Optional[int]] = mapped_column(Integer)
+    notes: Mapped[Optional[str]] = mapped_column(Text)
 
-class Product(Base):
-    __tablename__ = 'products'
-    __table_args__ = {'schema': 'northwind'}
-
-    productid = Column(Integer, primary_key=True)
-    productname = Column(String(35))
-    supplierid = Column(Integer, nullable=False)
-    categoryid = Column(Integer, nullable=False)
-    quantityperunit = Column(String(20))
-    unitprice = Column(Numeric(13, 4))
-    unitsinstock = Column(SmallInteger)
-    unitsonorder = Column(SmallInteger)
-    reorderlevel = Column(SmallInteger)
-    discontinued = Column(String(1))
-
-class Shipper(Base):
-    __tablename__ = 'shippers'
-    __table_args__ = {'schema': 'northwind'}
+    orders = relationship('Orders', back_populates='employees')
 
 
-    shipperid = Column(Integer, primary_key=True)
-    companyname = Column(String(20))
-    phone = Column(String(14))
-
-class Supplier(Base):
-    __tablename__ = 'suppliers'
-    __table_args__ = {'schema': 'northwind'}
-
-    supplierid = Column(Integer, primary_key=True)
-    companyname = Column(String(50))
-    contactname = Column(String(30))
-    contacttitle = Column(String(30))
-    address = Column(String(50))
-    city = Column(String(20))
-    region = Column(String(15))
-    postalcode = Column(String(8))
-    country = Column(String(15))
-    phone = Column(String(15))
-    fax = Column(String(15))
-    homepage = Column(String(100))
-
-class Order(Base):
-    __tablename__ = 'orders'
-    __table_args__ = {'schema': 'northwind'}
-
-    orderid = Column(Integer, primary_key=True)
-    customerid = Column(ForeignKey('northwind.customers.customerid', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
-    employeeid = Column(ForeignKey('northwind.employees.employeeid', ondelete='RESTRICT', onupdate='CASCADE'), nullable=False)
-    orderdate = Column(DateTime)
-    requireddate = Column(DateTime)
-    shippeddate = Column(DateTime)
-    freight = Column(Numeric(15, 4))
-    shipname = Column(String(35))
-    shipaddress = Column(String(50))
-    shipcity = Column(String(15))
-    shipregion = Column(String(15))
-    shippostalcode = Column(String(9))
-    shipcountry = Column(String(15))
-    shipperid = Column(Integer)
-
-    customer = relationship("Customer")
-    employee = relationship("Employee", back_populates="orders")
-    details = relationship("OrderDetail", back_populates="order")
-
-class OrderDetail(Base):
+class OrderDetails(Base):
     __tablename__ = 'order_details'
-    __table_args__ = {'schema': 'northwind'}
+    __table_args__ = (
+        ForeignKeyConstraint(['orderid'], ['northwind.orders.orderid'], name='fk_order'),
+        ForeignKeyConstraint(['productid'], ['northwind.products.productid'], name='fk_product'),
+        PrimaryKeyConstraint('orderid', 'productid', name='order_details_pkey'),
+        {'schema': 'northwind'}
+    )
 
-    orderid = Column(ForeignKey('northwind.orders.orderid', ondelete='RESTRICT', onupdate='CASCADE'), primary_key=True, nullable=False)
-    productid = Column(ForeignKey('northwind.products.productid', ondelete='RESTRICT', onupdate='CASCADE'), primary_key=True, nullable=False)
-    unitprice = Column(Numeric(13, 4))
-    quantity = Column(SmallInteger)
-    discount = Column(Numeric(10, 4))
+    orderid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    productid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    unitprice: Mapped[Optional[decimal.Decimal]] = mapped_column(Numeric(13, 4))
+    quantity: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    discount: Mapped[Optional[decimal.Decimal]] = mapped_column(Numeric(10, 4))
 
-    order = relationship('Order', back_populates='details')
-    product = relationship('Product')
+    orders = relationship('Orders', back_populates='orderDetails')
+    products = relationship('Products')
+
+
+class Shippers(Base):
+    __tablename__ = 'shippers'
+    __table_args__ = (
+        PrimaryKeyConstraint('shipperid', name='shippers_pkey'),
+        {'schema': 'northwind'}
+    )
+
+    shipperid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    companyname: Mapped[Optional[str]] = mapped_column(String(20))
+    phone: Mapped[Optional[str]] = mapped_column(String(14))
+
+
+class Suppliers(Base):
+    __tablename__ = 'suppliers'
+    __table_args__ = (
+        PrimaryKeyConstraint('supplierid', name='supplier_pk'),
+        {'schema': 'northwind'}
+    )
+
+    supplierid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    companyname: Mapped[Optional[str]] = mapped_column(String(50))
+    contactname: Mapped[Optional[str]] = mapped_column(String(30))
+    contacttitle: Mapped[Optional[str]] = mapped_column(String(30))
+    address: Mapped[Optional[str]] = mapped_column(String(50))
+    city: Mapped[Optional[str]] = mapped_column(String(20))
+    region: Mapped[Optional[str]] = mapped_column(String(15))
+    postalcode: Mapped[Optional[str]] = mapped_column(String(8))
+    country: Mapped[Optional[str]] = mapped_column(String(15))
+    phone: Mapped[Optional[str]] = mapped_column(String(15))
+    fax: Mapped[Optional[str]] = mapped_column(String(15))
+    homepage: Mapped[Optional[str]] = mapped_column(String(100))
+
+
+class Orders(Base):
+    __tablename__ = 'orders'
+    __table_args__ = (
+        ForeignKeyConstraint(['customerid'], ['northwind.customers.customerid'], name='fk_customer'),
+        ForeignKeyConstraint(['employeeid'], ['northwind.employees.employeeid'], name='fk_employee'),  # Adicionada a chave estrangeira
+        PrimaryKeyConstraint('orderid', name='orders_pkey'),
+        {'schema': 'northwind'}
+    )
+
+    orderid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    customerid: Mapped[str] = mapped_column(String(5))
+    employeeid: Mapped[int] = mapped_column(Integer)
+    orderdate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    requireddate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    shippeddate: Mapped[Optional[datetime.datetime]] = mapped_column(DateTime)
+    freight: Mapped[Optional[decimal.Decimal]] = mapped_column(Numeric(15, 4))
+    shipname: Mapped[Optional[str]] = mapped_column(String(35))
+    shipaddress: Mapped[Optional[str]] = mapped_column(String(50))
+    shipcity: Mapped[Optional[str]] = mapped_column(String(15))
+    shipregion: Mapped[Optional[str]] = mapped_column(String(15))
+    shippostalcode: Mapped[Optional[str]] = mapped_column(String(9))
+    shipcountry: Mapped[Optional[str]] = mapped_column(String(15))
+    shipperid: Mapped[Optional[int]] = mapped_column(Integer)
+
+    customers = relationship("Customers")
+    employees = relationship("Employees", back_populates="orders")
+    orderDetails = relationship("OrderDetails", back_populates="orders")
+
+
+class Products(Base):
+    __tablename__ = 'products'
+    __table_args__ = (
+        ForeignKeyConstraint(['categoryid'], ['northwind.categories.categoryid'], name='fk_category'),
+        ForeignKeyConstraint(['supplierid'], ['northwind.suppliers.supplierid'], name='fk_supplier'),
+        PrimaryKeyConstraint('productid', name='products_pkey'),
+        {'schema': 'northwind'}
+    )
+
+    productid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    supplierid: Mapped[int] = mapped_column(Integer)
+    categoryid: Mapped[int] = mapped_column(Integer)
+    productname: Mapped[Optional[str]] = mapped_column(String(35))
+    quantityperunit: Mapped[Optional[str]] = mapped_column(String(20))
+    unitprice: Mapped[Optional[decimal.Decimal]] = mapped_column(Numeric(13, 4))
+    unitsinstock: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    unitsonorder: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    reorderlevel: Mapped[Optional[int]] = mapped_column(SmallInteger)
+    discontinued: Mapped[Optional[str]] = mapped_column(String(1))
