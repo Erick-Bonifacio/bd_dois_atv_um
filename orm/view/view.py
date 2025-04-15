@@ -49,16 +49,16 @@ class View:
         }
 
     def get_order_details(self):
+        quantity = int(input("Quantidade de itens no pedido: "))
         details = []
-        
-        print("\nDigite os detalhes dos itens do pedido (pressione enter para finalizar):")
-        while True:
-            product_id = input("ID do Produto: ")
-            if not product_id:
-                break
+
+        for _ in range(quantity):
+            product_id = input("ID do produto: ")
+            unit_price = input("Preço unitário: ")
             quantity = input("Quantidade: ")
-            unit_price = input("Preço: ")
-            details.append({"productid": product_id, "quantity": quantity, "unitprice": unit_price})
+            discount = input("Desconto: ")
+            details.append({"productid": product_id, "unitprice": unit_price, "quantity": quantity, "discount": discount})
+
         return details
 
     def get_order_id(self):
