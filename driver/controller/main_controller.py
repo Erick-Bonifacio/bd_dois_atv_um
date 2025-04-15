@@ -1,6 +1,6 @@
-from View.mainView import MainView
-from Model.ModelDAO.PedidoDAO import PedidoDAO
-from Model.Connection import Connection
+from view.main_view import MainView
+from model.model_dao.pedido_dao import PedidoDAO
+from model.connection import Connection
 
 class Controlador:
     def __init__(self):

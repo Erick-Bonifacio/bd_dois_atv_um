@@ -1,4 +1,4 @@
-from Model.Connection import Connection
+from model.connection import Connection
 from psycopg.errors import Error
 
 class PedidoDAO:
