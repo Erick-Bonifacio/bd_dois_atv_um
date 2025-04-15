@@ -36,7 +36,7 @@ class Controller:
         if order_info:
             self.view.display_order_info(order_info)
         else:
-            self.view.display_message("Order não encontrado.")
+            self.view.display_message("Order não encontrada.")
 
     def ranking_funcionarios(self):
         start_date = input("Data inicial (YYYY-MM-DD): ")

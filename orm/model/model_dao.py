@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
-from orm.model.models_northwind import Base, Order, OrderDetail, Customer, Employee
+from model.models_northwind import Base, Order, OrderDetail, Customer, Employee
 
 class OrderDAO:
     def __init__(self):
