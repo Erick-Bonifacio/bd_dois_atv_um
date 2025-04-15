@@ -1,18 +1,18 @@
-from view import View
-from dao import PedidoDAO
+from view.view import View
+from model.model_dao import OrderDAO
 
 class Controller:
     def __init__(self):
         self.view = View()
-        self.dao = PedidoDAO()
+        self.dao = OrderDAO()
 
     def start(self):
         while True:
             opcao = self.view.show_menu()
             if opcao == '1':
-                self.add_pedido()
+                self.add_order()
             elif opcao == '2':
-                self.infos_pedido()
+                self.infos_order()
             elif opcao == '3':
                 self.ranking_funcionarios()
             elif opcao == '4':
@@ -24,19 +24,19 @@ class Controller:
             input("Pressione Enter para continuar")
             self.view.clear_screen()
 
-    def add_pedido(self):
-        pedido_data = self.view.get_pedido_data()
-        pedido_details = self.view.get_pedido_details()
-        self.dao.create_pedido(pedido_data, pedido_details)
-        self.view.display_message("Pedido inserido com sucesso!")
+    def add_order(self):
+        order_data = self.view.get_order_data()
+        order_details = self.view.get_order_details()
+        self.dao.create_order(order_data, order_details)
+        self.view.display_message("Order inserido com sucesso!")
 
-    def infos_pedido(self):
-        pedido_id = self.view.get_pedido_id()  
-        pedido_info = self.dao.get_pedido_info(pedido_id)
-        if pedido_info:
-            self.view.display_pedido_info(pedido_info)
+    def infos_order(self):
+        order_id = self.view.get_order_id()  
+        order_info = self.dao.get_order_info(order_id)
+        if order_info:
+            self.view.display_order_info(order_info)
         else:
-            self.view.display_message("Pedido não encontrado.")
+            self.view.display_message("Order não encontrado.")
 
     def ranking_funcionarios(self):
         start_date = input("Data inicial (YYYY-MM-DD): ")
