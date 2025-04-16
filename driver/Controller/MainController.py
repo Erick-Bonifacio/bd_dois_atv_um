@@ -1,6 +1,8 @@
-from View.mainView import MainView
-from Model.ModelDAO.PedidoDAO import PedidoDAO
-from Model.Connection import Connection
+from driver.View.mainView import MainView
+from driver.Model.ModelDAO.PedidoDAO import PedidoDAO
+from driver.Model.Connection import Connection
+from datetime import datetime
+
 
 class Controlador:
     def __init__(self):
@@ -24,7 +26,7 @@ class Controlador:
                 except Exception as e:
                     mensagem_erro = "❌ Erro ao inserir pedido. Detalhes: " + str(e)
                     self.view.display_message(mensagem_erro)
-
+    
             elif opcao == '2':
                 id_pedido = self.view.get_order()
                 resultado = self.orderDAO.buscar_pedido_completo(id_pedido)
@@ -34,13 +36,31 @@ class Controlador:
                 else:
                     self.view.display_message("❗ Nenhum pedido encontrado com esse ID!")
 
-            elif opcao == '3':
-                resultado = self.orderDAO.ranking_funcionarios()
-                if resultado[2]:
-                    registros = resultado[2]
-                    self.view.display_rank(registros)
+            elif opcao == "3":
+                print("📊 Ranking de Funcionários por intervalo de contratação")
+
+                def solicitar_data(prompt):
+                    while True:
+                        data_input = input(prompt)
+                        try:
+                            # Valida o formato e se a data existe
+                            datetime.strptime(data_input, "%Y-%m-%d")
+                            return data_input
+                        except ValueError:
+                            print("❌ Data inválida. Use o formato YYYY-MM-DD e verifique se a data existe.")
+
+                data_inicio = solicitar_data("📅 Digite a data inicial (YYYY-MM-DD): ")
+                data_fim = solicitar_data("📅 Digite a data final (YYYY-MM-DD): ")
+
+                erro, _, resultado = self.orderDAO.ranking_funcionarios(data_inicio, data_fim)
+
+                if erro:
+                    print("❌ Erro ao consultar ranking:", erro)
                 else:
-                    self.view.display_message("❌ Não foi possível gerar o ranking")
+                    print("\n🏆 Ranking de Funcionários:")
+                    for nome, hiredate, total_pedidos, total_vendas in resultado:
+                        print(f"👤 {nome} | Contratado em: {hiredate} | Pedidos: {total_pedidos} | Total em vendas: ${total_vendas:.2f}")
+
 
             elif opcao == '4':
                 self.view.exit_program()

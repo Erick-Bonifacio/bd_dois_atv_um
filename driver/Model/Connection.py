@@ -9,6 +9,7 @@ class Connection:
         self.dbname = os.getenv("DB_NAME")
         self.user = os.getenv("DB_USER")
         self.password = os.getenv("DB_PASSWORD")
+        self.port = int(os.getenv("DB_PORT")) 
         self.conn = None
 
     def connect(self):
@@ -17,10 +18,15 @@ class Connection:
                 host=self.host,
                 dbname=self.dbname,
                 user=self.user,
-                password=self.password
+                password=self.password,
+                port=self.port
             )
+            print("✅ Conexão com o banco de dados estabelecida com sucesso!")
             return self.conn
-        except OperationalError:
+        except OperationalError as e:
+            print("ERRO 500 - Falha na conexão com o banco de dados")
+            print(f"Detalhes técnicos: {e}")
+            input("Pressione ENTER para continuar.")
             return None
 
     def close_connection(self):
