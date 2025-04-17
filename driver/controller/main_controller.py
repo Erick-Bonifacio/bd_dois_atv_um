@@ -36,6 +36,7 @@ class Controlador:
             elif opcao == '3':
                 id_pedido = self.view.get_order()
                 resultado = self.orderDAO.buscar_pedido_completo_inseguro(id_pedido)
+                print(resultado)
                 if resultado[2]:
                     registros = resultado[2]
                     self.view.display_information(registros)
