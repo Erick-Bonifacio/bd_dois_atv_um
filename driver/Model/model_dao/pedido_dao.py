@@ -1,4 +1,4 @@
-from model.connection import Connection
+from Model.Connection import Connection
 from psycopg.errors import Error
 
 class PedidoDAO:
@@ -16,6 +16,24 @@ class PedidoDAO:
             return False
 
     def buscar_pedido_completo(self, codigo_pedido):
+        consulta = """
+            SELECT 
+                p.orderid, 
+                p.orderdate, 
+                cli.contactname AS nome_cliente, 
+                emp.firstname AS nome_funcionario,
+                det.productid, 
+                det.unitprice, 
+                det.quantity
+            FROM orders p
+            JOIN customers cli ON p.customerid = cli.customerid
+            JOIN employees emp ON p.employeeid = emp.employeeid
+            LEFT JOIN order_details det ON p.orderid = det.orderid
+            WHERE p.orderid = %s;
+        """
+        return self.__executar_sql(consulta, params=(codigo_pedido,), fetch=True)
+
+    def buscar_pedido_completo_inseguro(self, codigo_pedido):
         consulta = """
             SELECT 
                 p.orderid, 

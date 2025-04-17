@@ -1,6 +1,5 @@
-from view.main_view import MainView
-from model.model_dao.pedido_dao import PedidoDAO
-from model.connection import Connection
+from View.main_view import MainView
+from Model.model_dao.pedido_dao import PedidoDAO
 
 class Controlador:
     def __init__(self):
@@ -35,6 +34,15 @@ class Controlador:
                     self.view.display_message("❗ Nenhum pedido encontrado com esse ID!")
 
             elif opcao == '3':
+                id_pedido = self.view.get_order()
+                resultado = self.orderDAO.buscar_pedido_completo_inseguro(id_pedido)
+                if resultado[2]:
+                    registros = resultado[2]
+                    self.view.display_information(registros)
+                else:
+                    self.view.display_message("❗ Nenhum pedido encontrado com esse ID!")
+
+            elif opcao == '4':
                 resultado = self.orderDAO.ranking_funcionarios()
                 if resultado[2]:
                     registros = resultado[2]
@@ -42,7 +50,7 @@ class Controlador:
                 else:
                     self.view.display_message("❌ Não foi possível gerar o ranking")
 
-            elif opcao == '4':
+            elif opcao == '5':
                 self.view.exit_program()
                 return
 
